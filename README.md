@@ -16,6 +16,8 @@
 
          make logs
 
+6.  You should use **`ttp://localhost:3001`** .
+
 # Launch without Docker
 
 1.  Make sure **`npm`** and **`node`** are installed and available from the terminal;
@@ -25,3 +27,5 @@
 3.  Launch the app.
 
         make build
+
+4.  You should use **`ttp://localhost:3001`** .
