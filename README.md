@@ -16,7 +16,7 @@
 
          make logs
 
-6.  You should use **`ttp://localhost:3001`** .
+6.  You should use **`http://localhost:3001`** .
 
 # Launch without Docker
 
@@ -28,4 +28,4 @@
 
         make build
 
-4.  You should use **`ttp://localhost:3001`** .
+4.  You should use **`http://localhost:3001`** .
