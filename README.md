@@ -28,4 +28,4 @@
 
         make build
 
-4.  You should use **`http://localhost:3001`** .
+4.  You should use **`http://localhost:3000`** .
