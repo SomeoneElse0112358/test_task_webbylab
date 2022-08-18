@@ -4,10 +4,12 @@ const createSchema = Joi.object({
   params: Joi.object(),
   query: Joi.object(),
   body: Joi.object({
-    title: Joi.string().required(),
-    year: Joi.number().required(),
+    title: Joi.string().trim().required(),
+    year: Joi.number().required().min(1850).max(2022).strict(),
     format: Joi.string().valid("VHS", "DVD", "Blu-Ray").required(),
-    actors: Joi.array().items(Joi.string().required()).required(),
+    actors: Joi.array()
+      .items(Joi.string().pattern(new RegExp("^[a-zA-Z ,-]{1,30}$")).required())
+      .required(),
   }),
 });
 
@@ -40,9 +42,11 @@ const updateSchema = Joi.object({
   query: Joi.object(),
   body: Joi.object({
     title: Joi.string(),
-    year: Joi.number(),
+    year: Joi.number().min(1850).max(2022),
     format: Joi.string().valid("VHS", "DVD", "Blu-Ray"),
-    actors: Joi.array().items(Joi.string().required()),
+    actors: Joi.array().items(
+      Joi.string().pattern(new RegExp("^[a-zA-Z ,-]{1,30}$")).required()
+    ),
   }),
 });
 

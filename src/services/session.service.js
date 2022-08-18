@@ -9,11 +9,17 @@ class SessionService {
     if (!user) {
       return { status: 0, message: "User not found" };
     }
+    const validPassword = await bcrypt.compare(
+      body.password,
+      user.dataValues.password
+    );
+    if (!validPassword) {
+      return { status: 0, message: "Password incorrect" };
+    }
     const token = createToken(body.email);
     await Session.create({
       ...body,
       token: token,
-      password: bcrypt.hashSync(body.password, bcrypt.genSaltSync(10)),
     });
 
     return { token: token, status: 1 };

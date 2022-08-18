@@ -21,7 +21,7 @@ class MovieService {
       where: { title: body.title, year: body.year },
     });
     if (existMovie) {
-      return { status: 0 };
+      return { status: 0, message: "Movie already exists" };
     }
 
     const actorInfo = await this.#getActorInfo(body.actors);
@@ -37,7 +37,7 @@ class MovieService {
   async getOne(id) {
     const result = await Movie.findOne({ where: { id: id } });
     if (!result) {
-      return { status: 0 };
+      return { status: 0, message: "Movie not found" };
     }
     const actorsList = result.dataValues.actors.split(",");
     const actorInfo = await Promise.all(
@@ -55,7 +55,8 @@ class MovieService {
     } else if (title && !actor && !search) {
       return { title: title };
     } else if (search && !actor && !title) {
-      const searchFilter = search.split("&");
+      const searchFilter = search.split(",");
+      console.log(searchFilter);
       return {
         title: searchFilter[0],
         actors: { [Op.like]: `%${searchFilter[1]}%` },
@@ -74,14 +75,19 @@ class MovieService {
       offset = 0,
       order = "ASC",
     } = filter;
-
-    return await Movie.findAll({
+    const result = await Movie.findAll({
       where: this.#composeFilter(actor, title, search),
       attributes: { exclude: ["actors"] },
       order: [[sort, order]],
       limit: limit,
       offset: offset,
     });
+    if (filter.sort === "title") {
+      return result.sort((movie1, movie2) => {
+        return movie1.title.localeCompare(movie2.title);
+      });
+    }
+    return result;
   }
 
   async update(id, body) {
@@ -105,13 +111,18 @@ class MovieService {
   }
 
   async delete(id) {
+    const movie = await this.getOne(id);
+
+    if (!movie.status) {
+      return movie;
+    }
     const result = await Movie.destroy({
       where: {
         id: id,
       },
     });
 
-    return { status: result };
+    return { status: result, message: "Movie deleted successfully" };
   }
 
   async import(movies) {

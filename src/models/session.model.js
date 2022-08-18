@@ -8,9 +8,6 @@ Session.init(
     email: {
       type: DataTypes.STRING,
     },
-    password: {
-      type: DataTypes.STRING,
-    },
     token: {
       type: DataTypes.STRING,
     },
